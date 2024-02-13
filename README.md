@@ -40,10 +40,10 @@ model.compile(optimizer=NewtonOptimizer(subsampling_rate=0.4),
 # Now you can train your model as usual
 model.fit(x_train, y_train, epochs=5)
 
-Contributing
+##Contributing
 
 Contributions to this project are welcome! If you'd like to suggest an improvement, please feel free to create a pull request or open an issue.
 
-License
+##License
 
 This project is made freely available. You may use it for personal or commercial projects as you wish.
