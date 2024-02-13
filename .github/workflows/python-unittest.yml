@@ -19,4 +19,4 @@ jobs:
         pip install tensorflow numpy
     - name: Run unittests
       run: |
-        python -m unittest my_tests/tests.py
+        python -m unittest mytests/tests.py
