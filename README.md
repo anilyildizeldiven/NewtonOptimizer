@@ -34,8 +34,9 @@ model = tf.keras.models.Sequential([
     tf.keras.layers.Dense(1)
 ])
 
-model.compile(optimizer=NewtonOptimizer(subsampling_rate=0.4),
-              loss='mean_squared_error')
+optimizer = NewtonOptimizer(subsampling_rate=0.7) 
+get_custom_objects().update({'NewtonOptimizer': optimizer})
+model.compile(optimizer='NewtonOptimizer', loss='mse')
 
 # Now you can train your model as usual
 model.fit(x_train, y_train, epochs=5)
