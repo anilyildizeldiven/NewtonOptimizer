@@ -72,7 +72,8 @@ class NewtonOptimizer(optimizer_v2.OptimizerV2):
         # Durchführung der Hessian-basierten Newton's Methode mit abgeschnittener Hesse-Matrix
         eps = 1e-4
         eye_eps = tf.eye(h_mat.shape[0]) * eps
-        
+
+        # hesse inverse auch in update_filtered berechnet?
         update_filtered = tf.linalg.solve(h_mat + eye_eps, g_vec)
         
         full_update = tf.scatter_nd(tf.reshape(subsample_indices, [-1, 1]), update_filtered, [loop, 1])
