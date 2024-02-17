@@ -74,6 +74,7 @@ class NewtonOptimizer(optimizer_v2.OptimizerV2):
         eye_eps = tf.eye(h_mat.shape[0]) * eps
 
         # hesse inverse auch in update_filtered berechnet?
+        #inv_hessian = tf.linalg.inv(flat_hessians + eye_eps)
         update_filtered = tf.linalg.solve(h_mat + eye_eps, g_vec)
         
         full_update = tf.scatter_nd(tf.reshape(subsample_indices, [-1, 1]), update_filtered, [loop, 1])
