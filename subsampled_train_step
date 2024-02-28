@@ -41,18 +41,22 @@ class NewtonOptimizedModel(Model):
     #     regularized_hessian = hessian + tf.eye(tf.shape(hessian)[0]) * regularization_strength
     #     return regularized_hessian
 
-    def train_step(self, var, loss, grad, data):
+    def train_step(self, var, data):
         x, y = data
         with tf.GradientTape(persistent=True) as tape:
             tape.watch(var)
             with tf.GradientTape() as inner_tape:
                 inner_tape.watch(var)
-                # Assuming `loss_fn` is defined elsewhere or passed to this method,
-                # which computes the loss given the model's output and true labels.
-                loss = loss(grad, model(var))  # Placeholder for actual loss computation
+                y_pred = self(x, training=True)
+                loss = self.compiled_loss(y, y_pred)
             grads = inner_tape.gradient(loss, var)
-
-        grad_flat = tf.reshape(grad, [-1])
+            
+         # with tf.GradientTape(persistent=True) as t2:
+         #     with tf.GradientTape(persistent=True) as t1:
+         #         y_pred = self(x, training=True)
+         #         loss = self.compiled_loss(y, y_pred)
+                 
+        grad_flat = tf.reshape(grads, [-1])
         loop = var.shape.num_elements()
 
         min_subsample_size = 1
@@ -80,7 +84,7 @@ class NewtonOptimizedModel(Model):
                     # Assuming `loss_fn` is defined elsewhere or passed to this method,
                     # which computes the loss given the model's output and true labels.
                 #     loss = loss_fn(y_true, model(var))  # Placeholder for actual loss computation
-                grads = inner_tape.gradient(loss, var)
+                #grads = inner_tape.gradient(loss, var)
             
             # Compute the Jacobian of the gradients (approximating the Hessian)
             jacobian = tape.jacobian(grad_flat_subsampled, var, unconnected_gradients=tf.UnconnectedGradients.ZERO)
@@ -138,6 +142,9 @@ class NewtonOptimizedModel(Model):
         # del t1, t2
         # self.compiled_metrics.update_state(y, y_pred)
         # return {m.name: m.result() for m in self.metrics}
+        del tape, inner_tape
+        self.compiled_metrics.update_state(y, y_pred)
+        return {m.name: m.result() for m in self.metrics}
 
     
       
