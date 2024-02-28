@@ -1,11 +1,5 @@
 import tensorflow as tf
 from tensorflow.python.keras.optimizer_v2 import optimizer_v2
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.utils import get_custom_objects
-import numpy as np
-# import matplotlib.pyplot as plt
-
 
 class NewtonOptimizer(optimizer_v2.OptimizerV2):
     def __init__(self, name="NewtonOptimizer", subsampling_rate=0.4, **kwargs):
