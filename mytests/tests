@@ -12,7 +12,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.utils import get_custom_objects
 # Importieren Sie hier Ihren NewtonOptimizer
-from customOptimizer import NewtonOptimizer 
+from supsampledNewton import NewtonOptimizer 
 import numpy as np
 
 class NewtonOptimizerTestCase(unittest.TestCase):
