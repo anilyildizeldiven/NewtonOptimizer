@@ -46,7 +46,12 @@ class NewtonOptimizer(optimizer_v2.OptimizerV2):
         # Newton's method for subsampled variables
         eps = 1e-4
         eye_eps = tf.eye(n_params) * eps
-        update_filtered = tf.linalg.solve(h_mat + eye_eps, g_vec)
+        try:
+            update_filtered = tf.linalg.solve(h_mat + eye_eps, g_vec)
+        except tf.errors.InvalidArgumentError:  # Falls solve fehlschlägt
+            # Alternativer Ansatz: Nutzung der Pseudo-Inversen für nicht-quadratische Matrizen
+            pseudo_inverse = tf.linalg.pinv(h_mat + eye_eps)
+            update_filtered = tf.matmul(pseudo_inverse, g_vec)
         
         # Prepare full update for subsampled variables
         full_update_subsampled = tf.scatter_nd(tf.reshape(subsample_indices, [-1, 1]), update_filtered, [loop, 1])
